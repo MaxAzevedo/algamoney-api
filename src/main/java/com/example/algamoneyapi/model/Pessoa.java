@@ -9,15 +9,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "categoria")
+@Table(name = "pessoa")
 @Getter @Setter
-public class Categoria {
+public class Pessoa {
 	
 	@Id
 	@GeneratedValue (strategy = GenerationType.AUTO)
@@ -25,10 +24,10 @@ public class Categoria {
 	private UUID id;
 	
 	@NotNull
-	private String codigo;
-	
-	@NotNull
-	@Size(min = 3, max = 20)
 	private String nome;
+	
+	private boolean ativo;
+	
+	private Endereco endereco;
 
 }
