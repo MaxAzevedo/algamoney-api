@@ -22,49 +22,49 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.algamoneyapi.event.RecursoCriadoEvent;
-import com.example.algamoneyapi.model.Pessoa;
-import com.example.algamoneyapi.repository.PessoaRepository;
-import com.example.algamoneyapi.service.PessoaService;
+import com.example.algamoneyapi.model.Lancamento;
+import com.example.algamoneyapi.repository.LancamentoRepository;
+import com.example.algamoneyapi.service.LancamentoService;
 
 @RestController
-@RequestMapping("/pessoas")
-public class PessoaResource {
+@RequestMapping("/lancamentos")
+public class LancamentoResource {
 	
 	@Autowired
-	private PessoaRepository pessoaRepository;
+	private LancamentoRepository lancamentoRepository;
 	
 	@Autowired	private ApplicationEventPublisher publisher;
 	
 	@Autowired
-	private PessoaService pessoaService;
+	private LancamentoService lancamentoService;
 	
 	@GetMapping
-	public List<Pessoa> listar() {
-		return pessoaRepository.findAll();
+	public List<Lancamento> listar() {
+		return lancamentoRepository.findAll();
 	}
 	
 	@PostMapping
-	public ResponseEntity<Pessoa> criar(@Valid @RequestBody Pessoa pessoa, HttpServletResponse response) {
-		Pessoa pessoaSalva = pessoaRepository.save(pessoa);
-		publisher.publishEvent(new RecursoCriadoEvent(this, response, pessoaSalva.getId()));
-		return ResponseEntity.status(HttpStatus.CREATED).body(pessoaSalva);
+	public ResponseEntity<Lancamento> criar(@Valid @RequestBody Lancamento lancamento, HttpServletResponse response) {
+		Lancamento lancamentoSalvo = lancamentoRepository.save(lancamento);
+		publisher.publishEvent(new RecursoCriadoEvent(this, response, lancamentoSalvo.getId()));
+		return ResponseEntity.status(HttpStatus.CREATED).body(lancamentoSalvo);
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> buscarPeloCodigo(@PathVariable UUID id) {
-		Optional<Pessoa> pessoa = pessoaRepository.findById(id);
-		return pessoa.isPresent() ? ResponseEntity.ok(pessoa) : ResponseEntity.notFound().build();
+		Optional<Lancamento> lancamento = lancamentoRepository.findById(id);
+		return lancamento.isPresent() ? ResponseEntity.ok(lancamento) : ResponseEntity.notFound().build();
 	}
 	
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deletar(@PathVariable UUID id) {
-		pessoaRepository.deleteById(id);
+		lancamentoRepository.deleteById(id);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Pessoa> update(@PathVariable UUID id, @Valid @RequestBody Pessoa pessoa, HttpServletResponse response) {
-		Pessoa pessoaSalva = pessoaService.atualizar(id, pessoa, response);
-		return ResponseEntity.ok(pessoaSalva);
+	public ResponseEntity<Lancamento> update(@PathVariable UUID id, @Valid @RequestBody Lancamento lancamento, HttpServletResponse response) {
+		Lancamento lancamentoSalvo = lancamentoService.atualizar(id, lancamento, response);
+		return ResponseEntity.ok(lancamentoSalvo);
 	}
 }
