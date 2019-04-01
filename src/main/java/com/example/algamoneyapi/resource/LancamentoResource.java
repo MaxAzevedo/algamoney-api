@@ -41,7 +41,7 @@ public class LancamentoResource {
 	
 	@GetMapping
 	public List<Lancamento> listar(LancamentoFilter filter) {
-		return lancamentoRepository.findAll();
+		return lancamentoRepository.filtrar(filter);
 	}
 	
 	@PostMapping
@@ -58,7 +58,7 @@ public class LancamentoResource {
 	}
 	
 	@DeleteMapping("/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@ResponseStatus(HttpStatus.OK)
 	public void deletar(@PathVariable UUID id) {
 		lancamentoRepository.deleteById(id);
 	}
